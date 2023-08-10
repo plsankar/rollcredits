@@ -1,6 +1,6 @@
 {
   "name": "rollcredits",
-  "description": "Do File Operations",
+  "description": "Lets' Roll Credits",
   "version": "0.0.1",
   "type": "module",
   "main": "dist/rollcredits.js",
