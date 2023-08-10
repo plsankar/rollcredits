@@ -1,6 +1,6 @@
 # rollcredits
 
-Do Better File Operations.
+Let's Roll Credits
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/plsankar/rollcredits/npm-publish.yml)
@@ -32,7 +32,7 @@ npx rollcredits
 
 ## Contributing
 
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/plsankar/fileorganizer-cli/issues)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/plsankar/rollcredits/issues)
 
 ## License
 
