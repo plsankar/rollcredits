@@ -2,6 +2,10 @@
 
 Let's Roll Credits
 
+<p align="center" width="100%">
+	<img alt="Rollcredits" src="screenshot.png">
+</P>
+
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/plsankar/rollcredits/npm-publish.yml)
 ![npm](https://img.shields.io/npm/dw/rollcredits)
