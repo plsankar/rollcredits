@@ -1,8 +1,12 @@
 #! /usr/bin/env node
 
-import boxen from "boxen";
 import figlet from "figlet";
-import inquirer, { Answers } from "inquirer";
+import dependencies from "./dependencies.js";
+
+import { mainQuestions } from "./questions.js";
+import markdown from "./templates/markdown.js";
+import { writeFileSync } from "fs";
+import boxen from "boxen";
 
 const banner = [figlet.textSync("rollcredits"), "Let's Roll Credits"];
 
@@ -14,35 +18,19 @@ console.log(
     })
 );
 
-function menuQuestion(): Promise<Answers> {
-    const questions = [
-        {
-            type: "checkbox",
-            name: "lookfor",
-            message: "What to look for?",
-            choices: [
-                {
-                    name: "Dependencies",
-                    value: 0,
-                },
-                {
-                    name: "Dev Dependencies",
-                    value: 1,
-                },
-                {
-                    name: "Images",
-                    value: 2,
-                },
-            ],
-        },
-    ];
-    return inquirer.prompt(questions);
-}
-
 async function run() {
-    const menuAnswers = await menuQuestion();
-    const { action } = menuAnswers;
-    console.log(menuAnswers);
+    const menuAnswers = await mainQuestions();
+    const { deepdeps, lookfor, mdname, writemd } = menuAnswers;
+    const data: Credits = {
+        dependencies: [],
+    };
+    if (lookfor.includes(0)) {
+        data.dependencies = await dependencies(process.cwd(), deepdeps);
+    }
+    if (writemd) {
+        const md = markdown(data);
+        writeFileSync(`./${mdname}`, md);
+    }
 }
 
 run();
