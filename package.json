@@ -1,7 +1,7 @@
 {
   "name": "rollcredits",
   "description": "Lets' Roll Credits",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist/rollcredits.js",
   "author": {
