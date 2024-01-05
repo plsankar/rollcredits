@@ -49,5 +49,15 @@
   "bugs": {
     "url": "https://github.com/plsankar/rollcredits/issues"
   },
-  "homepage": "https://github.com/plsankar/rollcredits#readme"
+  "homepage": "https://github.com/plsankar/rollcredits#readme",
+  "keywords": [
+    "credits",
+    "libraries",
+    "libraries list",
+    "credits list",
+    "dependencies list",
+    "scan licenses",
+    "scan libraries",
+    "scan dependencies"
+  ]
 }
