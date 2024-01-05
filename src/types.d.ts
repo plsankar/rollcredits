@@ -8,7 +8,7 @@ type DependencyCredit = {
     name: string;
     version: string;
     website: string;
-    license: DependencyLicense | null;
+    licenses: DependencyLicense[];
     authors: DependencyAuthor[];
 };
 

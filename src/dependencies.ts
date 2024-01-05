@@ -26,15 +26,14 @@ export default async function dependencies(folder: string, deep: boolean): Promi
         depsFolders.push(`node_modules/${key}`);
     });
 
-    depsFolders = depsFolders.filter((folder) => folder != "").filter((folder) => existsSync(folder));
+    depsFolders = depsFolders
+        .filter((folder) => folder != "")
+        .filter((folder) => existsSync(folder))
+        .filter((folder) => hasPackageJson(folder));
     depsFolders = _.uniq(depsFolders);
 
-    let depencyCredits: Array<DependencyCredit | null> = depsFolders.map((folder) => {
+    let depencyCredits: DependencyCredit[] = depsFolders.map((folder) => {
         const pkg = readPackageJson(folder);
-        if (!pkg) {
-            return null;
-        }
-
         const { name, version, homepage } = pkg;
 
         let authors: DependencyAuthor[] = [];
@@ -57,36 +56,33 @@ export default async function dependencies(folder: string, deep: boolean): Promi
             };
         });
 
-        let license: DependencyLicense | null = null;
+        let licenses: DependencyLicense[] = [];
 
         if (!pkg.license) {
             // Do noting;
         } else if (typeof pkg.license == "string") {
-            license = {
-                name: pkg.license,
-                url: `https://choosealicense.com/licenses/${pkg.license.toLowerCase()}/`,
-                content:
-                    ["LICENSE", "LICENSE.md", "license", "license.md"]
-                        .map((name) => readLicense(folder, name))
-                        .find((content) => content != null) ?? null,
-            };
+            const licenseParts = (pkg.license as string).split(" OR ").map((part) => part.replace(/\(|OR|\)/g, ""));
+            licenseParts.forEach((part) => {
+                licenses.push({
+                    name: part,
+                    url: `https://choosealicense.com/licenses/${part.toLowerCase()}/`,
+                    content: readLicense(folder),
+                });
+            });
         } else if (_.isObject(pkg.license)) {
-            license = {
+            licenses.push({
                 name: pkg.license.type,
                 url: pkg.license.url,
-                content:
-                    ["LICENSE", "LICENSE.md", "license", "license.md"]
-                        .map((name) => readLicense(folder, name))
-                        .find((content) => content != null) ?? null,
-            };
+                content: readLicense(folder),
+            });
         }
         return {
             name: String(name),
             version: String(version),
             website: String(!homepage || homepage === "" ? `https://www.npmjs.com/package/${name}` : homepage),
-            license: license,
+            licenses: licenses,
             authors,
-        } as DependencyCredit;
+        };
     });
 
     depencyCredits = _.sortBy(depencyCredits, ["name"]);
@@ -94,19 +90,22 @@ export default async function dependencies(folder: string, deep: boolean): Promi
     return _.compact(depencyCredits);
 }
 
+function hasPackageJson(folder: string): any | null {
+    const pkgPath = resolve(folder, `package.json`);
+    return existsSync(pkgPath);
+}
+
 function readPackageJson(folder: string): any | null {
     const pkgPath = resolve(folder, `package.json`);
-    if (!existsSync(pkgPath)) {
-        return null;
-    }
     const pkgRaw = readFileSync(pkgPath, "utf8");
     const pkg = JSON.parse(pkgRaw);
     return pkg;
 }
 
-function readLicense(folder: string, name: string): any | null {
-    const licensePath = resolve(folder, name);
-    if (!existsSync(licensePath)) {
+function readLicense(folder: string): any | null {
+    const licenses = ["LICENSE", "LICENSE.md", "license", "license.md"];
+    const licensePath = licenses.map((name) => resolve(folder, name)).find((file) => existsSync(file)) ?? null;
+    if (!licensePath) {
         return null;
     }
     const license = readFileSync(licensePath, "utf8");

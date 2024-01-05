@@ -15,7 +15,7 @@ const markdown = (data: Credits) => {
                     lib.authors
                         .map((author) => `[${author.name}](${author.url == "" ? lib.website : author.url})`)
                         .join(""),
-                    lib.license ? `[${lib.license.name}](${lib.license.url})` : null,
+                    lib.licenses.map((license) => `[${license.name}](${license.url})`).join(" OR "),
                 ];
             }),
         ]),
